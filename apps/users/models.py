@@ -1,19 +1,24 @@
 import uuid
 from django.db import models
-from django.contrib.auth.models import AbstractUser
+from django.contrib.auth.models import AbstractBaseUser, PermissionsMixin
 from django.utils import timezone
 
 from apps.users.manager import CustomUserManager
 
 
-class User(AbstractUser):
+class User(AbstractBaseUser, PermissionsMixin):
     """
     Custom user model that extends the default Django user model.
     Includes automatic created_at and updated_at timestamps.
     """
 
     email = models.EmailField(unique=True)
-    username = None
+    # Add these fields that were provided by AbstractUser
+    first_name = models.CharField(max_length=150, blank=True)
+    last_name = models.CharField(max_length=150, blank=True)
+    is_staff = models.BooleanField(default=False)
+    is_active = models.BooleanField(default=True)
+    date_joined = models.DateTimeField(default=timezone.now)
 
     # Make email the login field
     USERNAME_FIELD = "email"

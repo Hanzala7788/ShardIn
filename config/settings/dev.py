@@ -23,6 +23,16 @@ INSTALLED_APPS = [
     "rest_framework_simplejwt",
     "corsheaders",
     "apps.users",
+    "apps.posts",
+    "django_extensions",
+
+    # third party apps
+    "allauth",
+    "allauth.account",
+    "allauth.socialaccount",
+
+    # openid connect
+    'allauth.socialaccount.providers.openid_connect',
 ]
 AUTH_USER_MODEL = "users.User"
 
@@ -36,6 +46,7 @@ MIDDLEWARE = [
     "django.contrib.messages.middleware.MessageMiddleware",
     "django.middleware.clickjacking.XFrameOptionsMiddleware",
     "whitenoise.middleware.WhiteNoiseMiddleware",
+    "allauth.account.middleware.AccountMiddleware",
 ]
 
 ROOT_URLCONF = "config.urls"
@@ -67,7 +78,7 @@ DATABASES = {
             "DB_NAME",
         ),
         "USER": os.getenv("DB_USER", ""),
-        "PASSWORD": os.getenv("DB_USER_PASSWORD", ""),
+        "PASSWORD": os.getenv("DB_PASSWORD", ""),
         "HOST": os.getenv("DB_HOST", ""),
         "PORT": os.getenv("DB_PORT", ""),
     }
@@ -103,6 +114,7 @@ REST_FRAMEWORK = {
 
 AUTHENTICATION_BACKENDS = [
     "django.contrib.auth.backends.ModelBackend",
+    "allauth.account.auth_backends.AuthenticationBackend",
 ]
 
 
@@ -135,3 +147,44 @@ STATIC_ROOT = os.path.join(BASE_DIR, "static")
 # https://docs.djangoproject.com/en/5.2/ref/settings/#default-auto-field
 
 DEFAULT_AUTO_FIELD = "django.db.models.BigAutoField"
+
+
+# Django Allauth Configuration
+ACCOUNT_LOGIN_METHODS = {"email"}
+ACCOUNT_FORMS = {
+    "signup": "apps.users.forms.CustomSignupForm",
+}
+ACCOUNT_USER_MODEL_USERNAME_FIELD = None
+ACCOUNT_USERNAME_REQUIRED = False
+ACCOUNT_EMAIL_REQUIRED = True
+ACCOUNT_EMAIL_VERIFICATION = "optional"
+
+# Redirect URLs
+LOGIN_REDIRECT_URL = '/'
+ACCOUNT_LOGOUT_REDIRECT_URL = '/accounts/login/'
+
+# CSRF Settings
+CSRF_TRUSTED_ORIGINS = [
+    'http://127.0.0.1:8001',
+    'http://localhost:8001',
+]
+ACCOUNT_EMAIL_VERIFICATION = "optional"
+SOCIALACCOUNT_STORE_TOKENS = True
+
+
+# SOCIALACCOUNT_PROVIDERS = {
+#     "openid_connect": {
+#         "APPS": [
+#             {
+#                 "provider_id": "linkedin",
+#                 "name": "LinkedIn",
+#                 "client_id": "<insert-id>",
+#                 "secret": "<insert-secret>",
+#                 "settings": {
+#                     "scope": ["openid", "profile", "w_member_social"],
+#                     "server_url": "https://www.linkedin.com/oauth",
+#                 },
+#             }
+#         ]
+#     }
+# }
