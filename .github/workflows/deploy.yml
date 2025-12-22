@@ -15,6 +15,26 @@ jobs:
       - name: Checkout code
         uses: actions/checkout@v4
 
+      - name: Debug secrets
+        run: |
+          echo "Checking if secrets are configured..."
+          echo "AWS_HOST is set: ${{ secrets.AWS_HOST != '' }}"
+          echo "AWS_USER is set: ${{ secrets.AWS_USER != '' }}"
+          echo "AWS_SSH_KEY is set: ${{ secrets.AWS_SSH_KEY != '' }}"
+          if [ -z "${{ secrets.AWS_HOST }}" ]; then
+            echo "ERROR: AWS_HOST secret is not set!"
+            exit 1
+          fi
+          if [ -z "${{ secrets.AWS_USER }}" ]; then
+            echo "ERROR: AWS_USER secret is not set!"
+            exit 1
+          fi
+          if [ -z "${{ secrets.AWS_SSH_KEY }}" ]; then
+            echo "ERROR: AWS_SSH_KEY secret is not set!"
+            exit 1
+          fi
+          echo "All required secrets are configured ✓"
+
       - name: Deploy with Docker Compose
         uses: appleboy/ssh-action@v1
         with:
