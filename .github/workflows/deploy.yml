@@ -46,6 +46,7 @@ jobs:
           script: |
             cd ~/ShardIn || cd /home/$USER/ShardIn
             git pull origin main
+            chmod +x entrypoint.sh
             docker compose down
             docker image prune -f
             docker compose up -d --build
