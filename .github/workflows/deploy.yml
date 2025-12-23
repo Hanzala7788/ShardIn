@@ -45,13 +45,11 @@ jobs:
           port: 22
           script: |
             cd ~/ShardIn || cd /home/$USER/ShardIn
-            git pull origin ${{ github.ref_name }}
+            git pull origin main
             chmod +x entrypoint.sh
             docker compose down
-            docker rmi shardin-web || true
             docker image prune -f
-            docker compose build --no-cache web
-            docker compose up -d
+            docker compose up -d --build
             sleep 10
             docker compose exec -T web python manage.py migrate --noinput
             docker compose exec -T web python manage.py collectstatic --noinput
