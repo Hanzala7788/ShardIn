@@ -11,7 +11,6 @@ load_dotenv()
 
 DEBUG = True
 ALLOWED_HOSTS = json.loads(os.getenv("ALLOWED_HOSTS", '["127.0.0.1", "13.60.157.187", "localhost"]'))
-print(ALLOWED_HOSTS)
 
 INSTALLED_APPS = [
     "django.contrib.admin",
