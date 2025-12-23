@@ -10,7 +10,7 @@ BASE_DIR = os.path.dirname(os.path.dirname(__file__))
 load_dotenv()
 
 DEBUG = True
-ALLOWED_HOSTS = json.loads(os.getenv("ALLOWED_HOSTS", '["127.0.0.1", "13.60.157.187", "localhost"]'))
+ALLOWED_HOSTS = json.loads(os.getenv("ALLOWED_HOSTS_", '["127.0.0.1", "13.60.157.187", "localhost"]'))
 
 INSTALLED_APPS = [
     "django.contrib.admin",
